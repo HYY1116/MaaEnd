@@ -158,8 +158,6 @@ func (a *ResellInitAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 	}
 
 	// Output results using focus
-	ResellShowMessage(ctx, "========== 识别完成 ==========")
-	ResellShowMessage(ctx, fmt.Sprintf("总共识别到%d件商品", len(records)))
 	for i, record := range records {
 		log.Info().Int("No.", i+1).Int("列", record.Col).Int("成本", record.CostPrice).Int("售价", record.SalePrice).Int("利润", record.Profit).Msg("[Resell]商品信息")
 	}
@@ -177,19 +175,17 @@ func (a *ResellInitAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 	if maxProfitIdx >= 0 {
 		maxRecord = records[maxProfitIdx]
 		if maxRecord.Profit >= MinimumProfit {
-			ResellShowMessage(ctx, fmt.Sprintf("当前利润最高商品:第%d行, 第%d列，利润%d", maxRecord.Row, maxRecord.Col, maxRecord.Profit))
+			ResellShowMessage(ctx, fmt.Sprintf("总共识别到%d件商品，当前利润最高商品:第%d行, 第%d列，利润%d", len(records), maxRecord.Row, maxRecord.Col, maxRecord.Profit))
 			taskName := fmt.Sprintf("ResellSelectProductRow%dCol%d", maxRecord.Row, maxRecord.Col)
 			ctx.OverrideNext(arg.CurrentTaskName, []string{taskName})
 		} else {
-			ResellShowMessage(ctx, fmt.Sprintf("没有利润超过%d的商品，建议把配额留至明天", MinimumProfit))
-			ResellShowMessage(ctx, fmt.Sprintf("当前利润最高商品:第%d行, 第%d列，利润%d", maxRecord.Row, maxRecord.Col, maxRecord.Profit))
+			ResellShowMessage(ctx, fmt.Sprintf("总共识别到%d件商品,没有利润超过%d的商品，建议把配额留至明天,当前利润最高商品:第%d行, 第%d列，利润%d", len(records), MinimumProfit, maxRecord.Row, maxRecord.Col, maxRecord.Profit))
 			controller.PostClickKey(27) //返回至地区管理界面
 			ctx.OverrideNext(arg.CurrentTaskName, []string{"ChangeNextRegion"})
 		}
 	} else {
 		log.Info().Msg("出现错误")
 	}
-	ResellShowMessage(ctx, "=============================")
 	return true
 }
 
