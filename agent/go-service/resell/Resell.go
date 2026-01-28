@@ -40,7 +40,7 @@ func (a *ResellInitAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 	}
 
 	// Define three rows with different Y coordinates
-	roiRows := []int{354, 484, 571}
+	roiRows := []int{360, 484, 567}
 	rowNames := []string{"第一行", "第二行", "第三行"}
 
 	// Process multiple items by scanning across ROI
@@ -62,10 +62,10 @@ func (a *ResellInitAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 			// Step 1: 识别商品价格
 			log.Info().Msg("第一步：识别商品价格")
 			stepCounter++
-			delay_freezes_time(ctx, 400)
+			delay_freezes_time(ctx, 200)
 			controller.PostScreencap().Wait()
 
-			costPrice, success := ocrExtractNumber(ctx, controller, currentROIX, roiY, 141, 31)
+			costPrice, success := ocrExtractNumber(ctx, controller, currentROIX, roiY, 141, 40)
 			if !success {
 				log.Info().Msgf("没有在X=%d+141, Y=%d+31的区域内发现数字（代表没有商品）,切换至下一行", currentROIX, roiY)
 				break
@@ -78,7 +78,7 @@ func (a *ResellInitAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 
 			// Step 2: 识别“查看好友价格”，包含“好友”二字则继续
 			log.Info().Msg("第二步：查看好友价格")
-			delay_freezes_time(ctx, 400)
+			delay_freezes_time(ctx, 200)
 			controller.PostScreencap().Wait()
 
 			success = ocrExtractText(ctx, controller, 944, 446, 98, 26, "好友")
@@ -101,7 +101,7 @@ func (a *ResellInitAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 			// Step 3: 检查好友列表第一位的出售价，即最高价格
 			log.Info().Msg("第三步：识别好友出售价")
 			//等两秒加载好友价格
-			delay_freezes_time(ctx, 1000)
+			delay_freezes_time(ctx, 600)
 			controller.PostScreencap().Wait()
 
 			salePrice, success := ocrExtractNumber(ctx, controller, 797, 294, 45, 28)
@@ -134,7 +134,7 @@ func (a *ResellInitAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 
 			// Step 4: 检查页面右上角的“返回”按钮，按ESC返回
 			log.Info().Msg("第四步：返回商品详情页")
-			delay_freezes_time(ctx, 400)
+			delay_freezes_time(ctx, 200)
 			controller.PostScreencap().Wait()
 
 			success = ocrExtractText(ctx, controller, 1039, 135, 47, 21, "返回")
@@ -145,7 +145,7 @@ func (a *ResellInitAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 
 			// Step 5: 识别“查看好友价格”，包含“好友”二字则按ESC关闭页面
 			log.Info().Msg("第五步：关闭商品详情页")
-			delay_freezes_time(ctx, 400)
+			delay_freezes_time(ctx, 200)
 			controller.PostScreencap().Wait()
 
 			success = ocrExtractText(ctx, controller, 944, 446, 98, 26, "好友")

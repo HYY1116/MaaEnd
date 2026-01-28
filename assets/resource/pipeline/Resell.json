@@ -135,16 +135,15 @@
     },
     "ResellStageEnterStore": {
         "doc": "进入商店",
-        "recognition": "OCR",
+        "recognition": "TemplateMatch",
+        "template": "Resell/EnterStore.png",
         "roi": [
-            793,
-            338,
-            88,
-            27
+            719,
+            291,
+            117,
+            120
         ],
-        "expected": "物资调度",
         "threshold": 0.8,
-        "pre_wait_freezes": 500,
         "post_delay": 500,
         "action": "Click",
         "next": [
@@ -206,10 +205,10 @@
         "recognition": "OCR",
         "order_by": "Expected",
         "roi": [
-            63,
-            303,
-            152,
-            239
+            70,
+            385,
+            1151,
+            254
         ],
         "expected": "[0-9]+",
         "action": "Click",
