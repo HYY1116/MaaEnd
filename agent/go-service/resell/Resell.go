@@ -355,8 +355,8 @@ func ExecuteResellTask(tasker *maa.Tasker) error {
 }
 
 func ResellShowMessage(ctx *maa.Context, text string) bool {
-	ctx.RunTask("Task", map[string]interface{}{
-		"Task": map[string]interface{}{
+	ctx.RunTask("[Resell]TaskShowMessage", map[string]interface{}{
+		"[Resell]TaskShowMessage": map[string]interface{}{
 			"focus": map[string]interface{}{
 				"Node.Action.Starting": text,
 			},
@@ -366,8 +366,8 @@ func ResellShowMessage(ctx *maa.Context, text string) bool {
 }
 
 func Resell_delay_freezes_time(ctx *maa.Context, time int) bool {
-	ctx.RunTask("Task", map[string]interface{}{
-		"Task": map[string]interface{}{
+	ctx.RunTask("[Resell]TaskDelay", map[string]interface{}{
+		"[Resell]TaskDelay": map[string]interface{}{
 			"pre_wait_freezes": time,
 		},
 	},
