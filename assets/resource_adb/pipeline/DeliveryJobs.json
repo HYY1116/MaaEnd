@@ -1,14 +1,12 @@
 {
-    "DeliveryJobsFinished": {
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/BackToRegionalConstruction.png",
-        "roi": [
-            1195,
-            14,
-            52,
-            43
-        ],
-        "threshold": 0.8,
-        "action": "Click"
+    // SceneEnterMenuRegionalDevelopment 暂时不支持 ADB
+    // 使用以前的方法，仅允许从大世界和地区管理页面启动
+    "DeliveryJobsMain": {
+        "doc": "开始自动转交运送委托",
+        "next": [
+            // "[JumpBack]SceneEnterMenuRegionalDevelopment",
+            "DeliveryJobsLoop",
+            "[JumpBack]RegionalDevelopmentButton"
+        ]
     }
 }

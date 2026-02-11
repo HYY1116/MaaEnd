@@ -1,133 +1,7 @@
 {
-    "EnterValleyIVDepot": {
-        "doc": "进入四号谷地仓储节点",
-        "recognition": "And",
-        "all_of": [
-            "DepotButton",
-            "CheckValleyIV"
-        ],
-        "action": "Click"
-    },
-    "EnterWulingDepot": {
-        "doc": "进入武陵仓储节点",
-        "recognition": "And",
-        "all_of": [
-            "DepotButton",
-            "CheckWuling"
-        ],
-        "action": "Click"
-    },
-    "DepotLocked": {
-        "doc": "仓储节点未解锁",
-        "recognition": "TemplateMatch",
-        "template": "DeliveryJobs/DepotLocked.png",
-        "threshold": 0.8,
-        "roi": [
-            1179,
-            347,
-            36,
-            47
-        ]
-    },
-    "CheckValleyIVDepotLocked": {
-        "doc": "检查四号谷地仓储节点是否解锁",
-        "recognition": "And",
-        "all_of": [
-            "DepotLocked",
-            "CheckValleyIV"
-        ],
-        "focus": {
-            "Node.Action.Starting": "四号谷地仓储节点未解锁"
-        },
-        "next": [
-            "CheckCurrentArea"
-        ]
-    },
-    "CheckWulingDepotLocked": {
-        "doc": "检查武陵仓储节点是否解锁",
-        "recognition": "And",
-        "all_of": [
-            "DepotLocked",
-            "CheckWuling"
-        ],
-        "focus": {
-            "Node.Action.Starting": "武陵仓储节点未解锁"
-        },
-        "next": [
-            "CheckCurrentArea"
-        ]
-    },
-    "CargoHasOffer": {
-        "doc": "货物有人报价",
-        "recognition": "OCR",
-        "order_by": "Expected",
-        "roi": [
-            78,
-            561,
-            985,
-            58
-        ],
-        "expected": [
-            "查看报价",
-            "查看報價",
-            "Check Bid",
-            "希望価格確認",
-            "입찰 보기"
-        ],
-        "action": "Click",
-        "next": [
-            "ProceedToNextStep",
-            "CargoHasOffer"
-        ]
-    },
-    "CargoNotReady": {
-        "doc": "货物未就绪，返回上一级界面",
-        "recognition": "OCR",
-        "order_by": "Expected",
-        "roi": [
-            78,
-            561,
-            985,
-            58
-        ],
-        "expected": [
-            "^\\d+小时\\d+分钟后就绪$",
-            "^\\d+小時\\d+分鐘後就緒$",
-            "^\\d+h \\d+min to activation$",
-            "^\\d+時間\\d+分後使用可能$",
-            "^\\d+시 \\d+분 후 준비 완료$"
-        ],
-        "action": "ClickKey",
-        "key": 27,
-        "next": [
-            "CheckCurrentArea",
-            "CargoNotReady"
-        ]
-    },
-    "EnterCargo": {
-        "doc": "进入货物",
-        "recognition": "OCR",
-        "order_by": "Expected",
-        "roi": [
-            78,
-            561,
-            985,
-            58
-        ],
-        "expected": [
-            "货物装箱",
-            "貨物裝箱",
-            "Pack Goods",
-            "パッキング",
-            "화물 포장"
-        ],
-        "action": "Click",
-        "next": [
-            "ProceedToNextStep",
-            "EnterCargo"
-        ]
-    },
-    "ProceedToNextStep": {
+    // 装箱货物的流程如下：
+    // 选择装箱货物类型（下一步）->装满货物（下一步）->货物竞价->调度申请（下一步）->单击屏幕继续->回到大世界界面
+    "DeliveryJobsProceedToNextStep": {
         "doc": "进入下一步",
         "recognition": "TemplateMatch",
         "template": "DeliveryJobs/NextStep.png",
@@ -140,14 +14,14 @@
         "threshold": 0.8,
         "action": "Click",
         "next": [
-            "CargoBid",
-            "CargoFillToMax",
-            "ClickScreenToContinue",
-            "BackToHome",
-            "ProceedToNextStep"
+            "DeliveryJobsBackToHome",
+            "DeliveryJobsClickScreenToContinue",
+            "DeliveryJobsCargoBid",
+            "DeliveryJobsCargoFillToMax",
+            "DeliveryJobsProceedToNextStep"
         ]
     },
-    "CargoFillToMax": {
+    "DeliveryJobsCargoFillToMax": {
         "doc": "装满货物",
         "recognition": "TemplateMatch",
         "template": "DeliveryJobs/CargoFillToMax.png",
@@ -160,11 +34,10 @@
         "threshold": 0.8,
         "action": "Click",
         "next": [
-            "ProceedToNextStep",
-            "CargoFillToMax"
+            "DeliveryJobsProceedToNextStep"
         ]
     },
-    "CargoBid": {
+    "DeliveryJobsCargoBid": {
         "doc": "货物竞价",
         "recognition": "TemplateMatch",
         "template": "DeliveryJobs/CargoBid.png",
@@ -177,12 +50,11 @@
         "threshold": 0.8,
         "action": "Click",
         "next": [
-            "ProceedToNextStep",
-            "CargoBid"
+            "DeliveryJobsProceedToNextStep"
         ]
     },
-    "ClickScreenToContinue": {
-        "doc": "单击屏幕继续",
+    "DeliveryJobsClickScreenToContinue": {
+        "doc": "单击屏幕继续，会直接回到大世界界面",
         "recognition": "OCR",
         "order_by": "Expected",
         "roi": [
@@ -200,7 +72,7 @@
         ],
         "action": "Click"
     },
-    "BackToHome": {
+    "DeliveryJobsBackToHome": {
         "doc": "已回到大世界（左上角出现地区建设入口），用于跳出循环",
         "recognition": "Or",
         "any_of": [
