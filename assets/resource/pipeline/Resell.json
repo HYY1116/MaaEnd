@@ -5,9 +5,7 @@
         "post_delay": 500,
         "next": [
             "ResellStageCheckArea",
-            "[JumpBack]ResellCheckInWorld1",
-            "[JumpBack]ResellCheckInWorld2",
-            "[JumpBack]ResellEscGoBack"
+            "[JumpBack]SceneEnterMenuRegionalDevelopment"
         ]
     },
     "ResellStageCheckArea": {
