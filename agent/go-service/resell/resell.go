@@ -230,7 +230,16 @@ func (a *ResellInitAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 	showMaxRecord := processMaxRecord(maxRecord)
 
 	// Check if we should purchase
-	if overflowAmount > 0 {
+	if maxRecord.Profit >= MinimumProfit {
+		// Normal mode: purchase if meets minimum profit
+		log.Info().Msgf("利润达标，准备购买第%d行第%d列商品（利润：%d）",
+			showMaxRecord.Row, showMaxRecord.Col, showMaxRecord.Profit)
+		taskName := fmt.Sprintf("ResellSelectProductRow%dCol%d", maxRecord.Row, maxRecord.Col)
+		ctx.OverrideNext(arg.CurrentTaskName, []maa.NodeNextItem{
+			{Name: taskName},
+		})
+		return true
+	} else if overflowAmount > 0 {
 		// Quota overflow detected, show reminder and recommend purchase
 		log.Info().Msgf("配额溢出：建议购买%d件商品，推荐第%d行第%d列（利润：%d）",
 			overflowAmount, showMaxRecord.Row, showMaxRecord.Col, showMaxRecord.Profit)
@@ -241,15 +250,6 @@ func (a *ResellInitAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 		maafocus.NodeActionStarting(ctx, message)
 		//进入下个地区
 		taskName := "ChangeNextRegionPrepare"
-		ctx.OverrideNext(arg.CurrentTaskName, []maa.NodeNextItem{
-			{Name: taskName},
-		})
-		return true
-	} else if maxRecord.Profit >= MinimumProfit {
-		// Normal mode: purchase if meets minimum profit
-		log.Info().Msgf("利润达标，准备购买第%d行第%d列商品（利润：%d）",
-			showMaxRecord.Row, showMaxRecord.Col, showMaxRecord.Profit)
-		taskName := fmt.Sprintf("ResellSelectProductRow%dCol%d", maxRecord.Row, maxRecord.Col)
 		ctx.OverrideNext(arg.CurrentTaskName, []maa.NodeNextItem{
 			{Name: taskName},
 		})
